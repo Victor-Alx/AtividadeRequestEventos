@@ -22,5 +22,5 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register.s
 Route::get('/login', [LoginController::class, 'create'])->name('login.create');
 Route::post('/login', [LoginController::class, 'store'])->name('login.store');
 Route::post('/logout', [LoginController::class, 'logout'])->name('auth.logout');
-
+Route::post('/perguntas/{pergunta}/votar')->name('perguntas.votar')->middleware('auth');
 

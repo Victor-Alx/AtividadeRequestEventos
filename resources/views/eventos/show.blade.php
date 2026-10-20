@@ -41,7 +41,26 @@
                     <p class="fs-5 mb-2 text-white">{{ $pergunta->texto }}</p>
                     <div class="d-flex justify-content-between align-items-center text-secondary small">
                         <span>Status: <span class="badge bg-success">{{ $pergunta->status }}</span></span>
+                        <span>Votos: <span>{{ $pergunta->votos_count }}</span></span>
                         <span>{{ $pergunta->created_at->format('d/m/Y H:i') }}</span>
+                        @php
+                        // Verifica se o usuário logado está na lista de votos da pergunta
+                        $jaVotou = auth()->check() && $pergunta->votos->contains('user_id', auth()->id());
+                        @endphp
+                
+                        @if($jaVotou)
+                        {{-- Botão Destacado (Remover Voto) --}}
+                        <button type="submit" class="btn btn-primary btn-sm d-flex flex-column align-items-center px-3 py-2 border-0" title="Você já votou! Clique para remover o seu voto">
+                            <i class="bi bi-caret-up-fill fs-5 lh-1"></i>
+                            <span class="fw-bold mt-1 text-white">{{ $pergunta->votos_count }}</span>
+                        </button>
+                        @else
+                        {{-- Botão Padrão (Adicionar Voto) --}}
+                        <button type="submit" class="btn btn-outline-secondary btn-sm d-flex flex-column align-items-center px-3 py-2 text-secondary" title="Clique para votar nesta pergunta">
+                            <i class="bi bi-caret-up fs-5 lh-1"></i>
+                            <span class="fw-bold mt-1">{{ $pergunta->votos_count }}</span>
+                        </button>
+                        @endif
                     </div>
                 </div>
             </div>

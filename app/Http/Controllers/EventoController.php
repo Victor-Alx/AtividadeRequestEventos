@@ -20,7 +20,7 @@ class EventoController extends Controller
     {
         $evento = Evento::find($id);
 
-        $perguntas = Pergunta::all();
+        $perguntas = Pergunta::withCount('votos')->orderByDesc('votos_count')->get();
 
         return view('eventos.show', compact('evento', 'perguntas'));
     }
@@ -48,5 +48,11 @@ class EventoController extends Controller
     public function store(EventoFormRequest $request){
         $evento = $request->user()->eventos()->create($request->validated());
         return redirect()->route('eventos.show', $evento->id);
+    }
+
+    public function votar(Pergunta $pergunta)
+    {
+        $pergunta->votos()->toggle(Auth::id());
+        return back();
     }
 }
